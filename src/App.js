@@ -6,13 +6,13 @@ function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState('')
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=6f90e27aefc0c9f17d253232aa9f727b`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=6f90e27aefc0c9f17d253232aa9f727b`;
 
   const searchLocation = (e) => {
     if (e.key === 'Enter') {
       axios.get(url).then((response) => {
         setData(response.data)
-        console.log(response.data)
+        // console.log(response.data)
       })
       setLocation('')
     }
@@ -35,26 +35,30 @@ function App() {
             <p>{data.name}</p>
           </div>
           <div className="temp">
-            <h1>60F</h1>
+            {data.main ? <h1>{data.main.temp.toFixed()}F</h1>: null}
           </div>
           <div className="description">
-            <p>Clouds</p>
+            {data.weather ? <p>{data.weather[0].main}</p> : null}
           </div>
         </div>
-        <div className="bottom">
-          <div className="feels">
-            <p className="bold">65F</p>
-            <p>Feels like</p>
+
+        {data.name != undefined && 
+          <div className="bottom">
+            <div className="feels">
+              {data.main ? <p className="bold">{data.main.feels_like.toFixed()}F</p> : null}
+              <p>Feels like</p>
+            </div>
+            <div className="humidity">
+              {data.main ? <p className="bold">{data.main.humidity.toFixed()}%</p> : null}
+              <p>Humidity</p>
+            </div>
+            <div className="wind">
+              {data.wind ? <p className="bold">{data.wind.speed.toFixed()}MPH</p> : null}
+              <p>Wind speed</p>
+            </div>
           </div>
-          <div className="humidity">
-            <p className="bold">20%</p>
-            <p>Humidity</p>
-          </div>
-          <div className="wind">
-            <p className="bold">20 MPH</p>
-            <p>Wind speed</p>
-          </div>
-        </div>
+        }
+        
       </div>
     
     </div>
